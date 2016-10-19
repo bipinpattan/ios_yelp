@@ -8,16 +8,20 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var businesses: [Business]!
     
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
+            self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {
                     print(business.name!)
@@ -55,5 +59,22 @@ class BusinessesViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
+
+    // MARK:- Delegate callbacks
+    // MARK: UITableViewDataSource
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.businesses?.count ?? 0;
+    }
     
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
+        cell.business = self.businesses[indexPath.row]
+        return cell
+        
+    }
+    
+    func setupUI() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+    }
 }
