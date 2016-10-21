@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate {
     
     var businesses: [Business]!
     
@@ -50,16 +50,13 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navigationViewController = segue.destination as! UINavigationController
+        let filtersViewController = navigationViewController.topViewController as! FiltersViewController
+        filtersViewController.delegate = self
+    }
+    
     // MARK:- Delegate callbacks
     // MARK: UITableViewDataSource
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,6 +68,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         cell.business = self.businesses[indexPath.row]
         return cell
         
+    }
+    
+    // MARK: FiltersViewControllerDelegate
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+        var categories = filters["categories"] as? [String]
+        Business.searchWithTerm(term: "restaurants", sort: nil, categories: categories, deals: nil) {
+            (businesses:[Business]?, error:Error?) in
+            self.businesses = businesses
+            self.tableView.reloadData()
+        }
     }
     
     func setupUI() {
