@@ -74,7 +74,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func setupUI() {
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
+        
     }
 }
