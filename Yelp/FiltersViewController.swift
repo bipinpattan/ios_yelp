@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject])
+    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -52,7 +52,30 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         if selectedCategories.count > 0 {
             filters["categories"] = selectedCategories as AnyObject
         }
-        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
+        
+        var distMeters = 20000
+        for i in 0 ..< distancesSwitchStates.count  {
+            if distancesSwitchStates[i] == true {
+                switch i {
+                case 0:
+                    distMeters = 482
+                    break
+                case 0:
+                    distMeters = 1609
+                    break
+                case 0:
+                    distMeters = 1609 * 5
+                    break
+                case 0:
+                    distMeters = 1609 * 20
+                    break
+                default:
+                    distMeters = 1609 * 20
+                    break
+                }
+            }
+        }
+        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters)
     }
 
     func numberOfSections(in: UITableView) -> Int {
