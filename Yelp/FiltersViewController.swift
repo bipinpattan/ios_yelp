@@ -17,6 +17,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     var categories: [[String : String]]!
     var switchStates: [Int : Bool]!
+    var distances: [String]!
+    var distancesSwitchStates: [Int : Bool]!
+    var sortBy: [String]!
+    var sortBySwitchStates: [Int : Bool]!
+    var offeringADealState: Bool!
+    
     weak var delegate: FiltersViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -56,11 +62,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch (section) {
         case 0:
-            return 0
+            return 1
         case 1:
-            return 0
+            return distances.count
         case 2:
-            return 0
+            return sortBy.count
         case 3:
             return categories.count
         default:
@@ -85,20 +91,61 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func switchCell(switchCell: SwitchCell, didChange value: Bool) {
         let indexPath = tableView.indexPath(for: switchCell)!
-        switchStates[indexPath.row] = value
+        switch (indexPath.section) {
+        case 0:
+            offeringADealState = value
+            break
+        case 1:
+            distancesSwitchStates[indexPath.row] = value
+            break
+        case 2:
+            sortBySwitchStates[indexPath.row] = value
+            break
+        case 3:
+            switchStates[indexPath.row] = value
+            break
+        default:
+            break
+        }
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
-        cell.switchLabel.text = categories[indexPath.row]["name"]
-        cell.onSwitch.setOn(switchStates[indexPath.row] ?? false, animated: false)
+        switch (indexPath.section) {
+        case 0:
+            cell.switchLabel.text = "Offering a Deal"
+            cell.onSwitch.setOn(offeringADealState, animated: false)
+            break
+            
+        case 1:
+            cell.switchLabel.text = distances[indexPath.row]
+            cell.onSwitch.setOn(distancesSwitchStates[indexPath.row] ?? false, animated: false)
+            break
+            
+        case 2:
+            cell.switchLabel.text = sortBy[indexPath.row]
+            cell.onSwitch.setOn(sortBySwitchStates[indexPath.row] ?? false, animated: false)
+            break
+            
+        case 3:
+            cell.switchLabel.text = categories[indexPath.row]["name"]
+            cell.onSwitch.setOn(switchStates[indexPath.row] ?? false, animated: false)
+            break
+            
+        default: break
+        }
         cell.delegate = self
         return cell
     }
     
     func setupData() {
         categories = yelpCategories()
+        distances = distanceCategories()
+        sortBy = sortByCategories()
         switchStates = [Int : Bool]()
+        distancesSwitchStates = [Int : Bool]()
+        sortBySwitchStates = [Int : Bool]()
+        offeringADealState = Bool()
     }
     
     func setupUI() {
@@ -107,6 +154,23 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         navigationController?.navigationBar.barTintColor = UIColor.red;
         navigationController?.navigationBar.tintColor = UIColor.white;
         navigationController?.navigationBar.isTranslucent = false;
+    }
+    
+    func distanceCategories() -> [String] {
+        return ["Best Match",
+                "0.3 mile",
+                "1 mile",
+                "5 miles",
+                "20 miles"
+        ]
+    }
+    
+    func sortByCategories() -> [String] {
+        return ["Best Match",
+                "Distance",
+                "Rating",
+                "Most Reviewed"
+                ]
     }
     
     func yelpCategories() -> [[String : String]] {
