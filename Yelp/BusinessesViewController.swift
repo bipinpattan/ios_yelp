@@ -59,9 +59,9 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: FiltersViewControllerDelegate
-    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int) {
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool) {
         let categories = filters["categories"] as? [String]
-        Business.searchWithTerm(term: "restaurants", sort: nil, categories: categories, deals: nil, radiusMeters: distance) {
+        Business.searchWithTerm(term: "restaurants", sort: nil, categories: categories, deals: deals, radiusMeters: distance) {
             (businesses:[Business]?, error:Error?) in
             self.businesses = businesses
             self.tableView.reloadData()

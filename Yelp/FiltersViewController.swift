@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int)
+    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -75,7 +75,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
         }
-        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters)
+        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters, withDeals: offeringADealState)
     }
 
     func numberOfSections(in: UITableView) -> Int {
