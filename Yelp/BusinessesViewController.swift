@@ -79,10 +79,15 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
+        
         searchBar = UISearchBar()
         searchBar.sizeToFit()
         searchBar.delegate = self
+        
         navigationItem.titleView = searchBar
+        navigationController?.navigationBar.barTintColor = UIColor.red;
+        navigationController?.navigationBar.tintColor = UIColor.white;
+        navigationController?.navigationBar.isTranslucent = false;
     }
     
     func search(withTerm term: String) {

@@ -74,6 +74,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     func setupUI() {
         tableView.delegate = self
         tableView.dataSource = self
+        navigationController?.navigationBar.barTintColor = UIColor.red;
+        navigationController?.navigationBar.tintColor = UIColor.white;
+        navigationController?.navigationBar.isTranslucent = false;        
     }
     
     func yelpCategories() -> [[String : String]] {
