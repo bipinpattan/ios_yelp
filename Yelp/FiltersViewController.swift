@@ -49,8 +49,38 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
 
+    func numberOfSections(in: UITableView) -> Int {
+        return 4
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        switch (section) {
+        case 0:
+            return 0
+        case 1:
+            return 0
+        case 2:
+            return 0
+        case 3:
+            return categories.count
+        default:
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch (section) {
+        case 0:
+            return nil
+        case 1:
+            return "Distance"
+        case 2:
+            return "Sort By"
+        case 3:
+            return "Category"
+        default:
+            return nil
+        }
     }
     
     func switchCell(switchCell: SwitchCell, didChange value: Bool) {
@@ -76,7 +106,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.dataSource = self
         navigationController?.navigationBar.barTintColor = UIColor.red;
         navigationController?.navigationBar.tintColor = UIColor.white;
-        navigationController?.navigationBar.isTranslucent = false;        
+        navigationController?.navigationBar.isTranslucent = false;
     }
     
     func yelpCategories() -> [[String : String]] {
