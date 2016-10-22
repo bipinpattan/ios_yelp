@@ -96,10 +96,18 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             offeringADealState = value
             break
         case 1:
+            for i in 0 ..< distancesSwitchStates.count  {
+                distancesSwitchStates[i] = false
+            }
             distancesSwitchStates[indexPath.row] = value
+            tableView.reloadData()
             break
         case 2:
+            for i in 0 ..< sortBySwitchStates.count  {
+                sortBySwitchStates[i] = false
+            }
             sortBySwitchStates[indexPath.row] = value
+            tableView.reloadData()
             break
         case 3:
             switchStates[indexPath.row] = value
@@ -140,11 +148,20 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func setupData() {
         categories = yelpCategories()
-        distances = distanceCategories()
-        sortBy = sortByCategories()
         switchStates = [Int : Bool]()
+        
+        distances = distanceCategories()
         distancesSwitchStates = [Int : Bool]()
+        for i in 0 ..< distances.count  {
+            distancesSwitchStates[i] = false
+        }
+        
+        sortBy = sortByCategories()
         sortBySwitchStates = [Int : Bool]()
+        for i in 0 ..< sortBy.count  {
+            distancesSwitchStates[i] = false
+        }
+        
         offeringADealState = Bool()
     }
     
@@ -157,8 +174,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func distanceCategories() -> [String] {
-        return ["Best Match",
-                "0.3 mile",
+        return ["0.3 mile",
                 "1 mile",
                 "5 miles",
                 "20 miles"
@@ -168,8 +184,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     func sortByCategories() -> [String] {
         return ["Best Match",
                 "Distance",
-                "Rating",
-                "Most Reviewed"
+                "Rating"
                 ]
     }
     
