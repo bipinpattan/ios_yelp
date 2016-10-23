@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool)
+    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -75,7 +75,15 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
         }
-        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters, withDeals: offeringADealState)
+        
+        var sortBy = 0
+        for i in 0 ..< sortBySwitchStates.count  {
+            if sortBySwitchStates[i] == true {
+                break
+            }
+            sortBy += 1
+        }
+        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters, withDeals: offeringADealState, withSortBy:sortBy)
     }
 
     func numberOfSections(in: UITableView) -> Int {
