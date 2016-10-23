@@ -19,6 +19,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var offeringADealState: Bool!
     var isMoreDataLoading = false
     var searchTerm = "Thai"
+    var loadingMoreView: ActivityView?
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,18 +28,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         setupUI()
         setupData()
         search(withTerm: searchTerm)
-        
-        /* Example of Yelp search with more search options specified
-         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-         self.businesses = businesses
-         
-         for business in businesses {
-         print(business.name!)
-         print(business.address!)
-         }
-         }
-         */
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -72,7 +61,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     // MARK: FiltersViewControllerDelegate
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int, withCategoryStates categoryState: [Int : Bool]!, withDistancesStates distanceState: [Int : Bool]!, withSortByStates sortByState: [Int : Bool]!, withOfferingDealState dealState: Bool!) {
-        
+        searchBar.text = ""
+        searchTerm = ""
         var mode: YelpSortMode
         switch sortBy {
         case 1:
@@ -109,9 +99,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
                 isMoreDataLoading = true
                 
-                // ... Code to load more results ...
-                print("Load more data")
                 search(withTerm: searchTerm)
+                
+                // Update position of loadingMoreView, and start loading indicator
+                let frame = CGRect(x: 0, y:tableView.contentSize.height, width: tableView.bounds.size.width, height: ActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
             }
         }
     }
@@ -138,6 +131,17 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         navigationController?.navigationBar.barTintColor = UIColor.red;
         navigationController?.navigationBar.tintColor = UIColor.white;
         navigationController?.navigationBar.isTranslucent = false;
+        
+        // Set up Infinite Scroll loading indicator
+        let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: ActivityView.defaultHeight)
+        loadingMoreView = ActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset;
+        insets.bottom += ActivityView.defaultHeight;
+        tableView.contentInset = insets
+        
     }
     
     func setupData() {
@@ -152,6 +156,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         Business.searchWithTerm(term: term, offset:businesses.count, completion: { (businesses: [Business]?, error: Error?) -> Void in
 
             self.isMoreDataLoading = false
+            self.loadingMoreView!.stopAnimating()
             if let businesses = businesses {
                 for business in businesses {
                     self.businesses.append(business)
