@@ -184,21 +184,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func setupData() {
         categories = yelpCategories()
-//        switchStates = [Int : Bool]()
-        
         distances = distanceCategories()
-//        distancesSwitchStates = [Int : Bool]()
-//        for i in 0 ..< distances.count  {
-//            distancesSwitchStates[i] = false
-//        }
-        
         sortBy = sortByCategories()
-//        sortBySwitchStates = [Int : Bool]()
-//        for i in 0 ..< sortBy.count  {
-//            distancesSwitchStates[i] = false
-//        }
-        
-//        offeringADealState = Bool()
     }
     
     func setupUI() {

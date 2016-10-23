@@ -268,7 +268,13 @@
                             <constraint firstItem="Er4-QS-Gzw" firstAttribute="top" secondItem="gRD-zj-aKb" secondAttribute="bottom" id="uGU-WG-S01"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Map" id="rCv-2W-qXQ"/>
+                    <navigationItem key="navigationItem" title="Map" id="rCv-2W-qXQ">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="2w3-xr-h9H">
+                            <connections>
+                                <action selector="onDoneButton:" destination="Rl0-Vj-T56" id="RAm-Qc-1I4"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="Er4-QS-Gzw" id="h26-vF-PHD"/>
                     </connections>

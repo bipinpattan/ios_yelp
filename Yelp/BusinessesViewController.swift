@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UIScrollViewDelegate,  FiltersViewControllerDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UIScrollViewDelegate,  FiltersViewControllerDelegate, MapViewControllerDelegate {
     
     var businesses: [Business]!
     var searchBar: UISearchBar!
@@ -51,6 +51,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         case is MapViewController:
             let mapViewController = navigationViewController.topViewController as! MapViewController
             mapViewController.businesses = businesses
+            mapViewController.delegate = self
             break
         default:
             break
@@ -97,6 +98,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             self.businesses = businesses
             self.tableView.reloadData()
         }
+    }
+    
+    // MARK: MapViewControllerDelegate
+    func mapViewControllerDidComplete(mapViewController: MapViewController) {
+        
     }
     
     // MARK: UIScrollViewDelegate

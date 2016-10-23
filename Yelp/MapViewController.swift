@@ -10,15 +10,26 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol MapViewControllerDelegate {
+    func mapViewControllerDidComplete(mapViewController: MapViewController)
+}
+
 class MapViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var mapView: MKMapView!
+    
     var locationManager : CLLocationManager!
     var businesses: [Business]!
+    var delegate : MapViewControllerDelegate?
     
     override func viewDidLoad() {
         setupUI()
     }
 
+    @IBAction func onDoneButton(_ sender: AnyObject) {
+        delegate?.mapViewControllerDidComplete(mapViewController: self)
+        dismiss(animated: true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
