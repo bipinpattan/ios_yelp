@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FiltersViewControllerDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UIScrollViewDelegate,  FiltersViewControllerDelegate {
     
     var businesses: [Business]!
     var searchBar: UISearchBar!
@@ -17,6 +17,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var distancesStates: [Int : Bool]!
     var sortByStates: [Int : Bool]!
     var offeringADealState: Bool!
+    var isMoreDataLoading = false
+    var searchTerm = "Thai"
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,7 +26,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         super.viewDidLoad()
         setupUI()
         setupData()
-        search(withTerm: "Thai")
+        search(withTerm: searchTerm)
         
         /* Example of Yelp search with more search options specified
          Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
@@ -89,16 +91,35 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         self.offeringADealState = dealState
         
         let categories = filters["categories"] as? [String]
-        Business.searchWithTerm(term: "restaurants", sort: mode, categories: categories, deals: deals, radiusMeters: distance) {
+        Business.searchWithTerm(term: "restaurants", sort: mode, categories: categories, deals: deals, radiusMeters: distance, offset: nil) {
             (businesses:[Business]?, error:Error?) in
             self.businesses = businesses
             self.tableView.reloadData()
         }
     }
     
+    // MARK: UIScrollViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                
+                // ... Code to load more results ...
+                print("Load more data")
+                search(withTerm: searchTerm)
+            }
+        }
+    }
+    
     // MARK: UISearchBarDelegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        search(withTerm: searchBar.text!)
+        searchTerm = searchBar.text!
+        search(withTerm: searchTerm)
         searchBar.resignFirstResponder()
     }
     
@@ -111,6 +132,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         searchBar = UISearchBar()
         searchBar.sizeToFit()
         searchBar.delegate = self
+        searchBar.text = searchTerm
         
         navigationItem.titleView = searchBar
         navigationController?.navigationBar.barTintColor = UIColor.red;
@@ -123,12 +145,18 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         distancesStates = [Int : Bool]()
         sortByStates = [Int : Bool]()
         offeringADealState = Bool()
+        businesses = [Business]()
     }
     
     func search(withTerm term: String) {
-        Business.searchWithTerm(term: term, completion: { (businesses: [Business]?, error: Error?) -> Void in
-            
-            self.businesses = businesses
+        Business.searchWithTerm(term: term, offset:businesses.count, completion: { (businesses: [Business]?, error: Error?) -> Void in
+
+            self.isMoreDataLoading = false
+            if let businesses = businesses {
+                for business in businesses {
+                    self.businesses.append(business)
+                }
+            }
             self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {
