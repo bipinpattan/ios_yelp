@@ -173,7 +173,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     func search(withTerm term: String) {
         if self.isMoreDataLoading == false {
             MBProgressHUD.showAdded(to: self.view, animated: true)
+            businesses.removeAll()
+            tableView.reloadData()
         }
+        
+        
         Business.searchWithTerm(term: term, offset:businesses.count, completion: { (businesses: [Business]?, error: Error?) -> Void in
             if self.isMoreDataLoading == false {
                 MBProgressHUD.hide(for: self.view, animated: true)
