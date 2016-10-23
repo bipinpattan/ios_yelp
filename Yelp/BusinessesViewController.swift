@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UIScrollViewDelegate,  FiltersViewControllerDelegate, MapViewControllerDelegate {
     
@@ -170,8 +171,13 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func search(withTerm term: String) {
+        if self.isMoreDataLoading == false {
+            MBProgressHUD.showAdded(to: self.view, animated: true)
+        }
         Business.searchWithTerm(term: term, offset:businesses.count, completion: { (businesses: [Business]?, error: Error?) -> Void in
-
+            if self.isMoreDataLoading == false {
+                MBProgressHUD.hide(for: self.view, animated: true)
+            }
             self.isMoreDataLoading = false
             self.loadingMoreView!.stopAnimating()
             if let businesses = businesses {
