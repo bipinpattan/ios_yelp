@@ -38,12 +38,23 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationViewController = segue.destination as! UINavigationController
-        let filtersViewController = navigationViewController.topViewController as! FiltersViewController
-        filtersViewController.delegate = self
-        filtersViewController.switchStates = categoryStates
-        filtersViewController.distancesSwitchStates = distancesStates
-        filtersViewController.sortBySwitchStates = sortByStates
-        filtersViewController.offeringADealState = offeringADealState
+        switch navigationViewController.topViewController {
+        case is FiltersViewController:
+            let filtersViewController = navigationViewController.topViewController as! FiltersViewController
+            filtersViewController.delegate = self
+            filtersViewController.switchStates = categoryStates
+            filtersViewController.distancesSwitchStates = distancesStates
+            filtersViewController.sortBySwitchStates = sortByStates
+            filtersViewController.offeringADealState = offeringADealState
+            break
+        
+        case is MapViewController:
+            let mapViewController = navigationViewController.topViewController as! MapViewController
+            mapViewController.businesses = businesses
+            break
+        default:
+            break
+        }
     }
     
     // MARK:- Delegate callbacks

@@ -26,7 +26,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="105"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5DN-Ml-Oog" id="yyW-cc-lqd">
-                                            <frame key="frameInset" width="375" height="104"/>
+                                            <frame key="frameInset" width="375" height="104.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lX9-ha-54I">
@@ -122,6 +122,11 @@
                                 <segue destination="vdW-QT-fuH" kind="presentation" id="aLw-61-3CT"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="fxq-wV-Hgh">
+                            <connections>
+                                <segue destination="eYG-bb-4Fu" kind="presentation" id="Hhy-j7-XDm"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="v87-sd-Nad" id="UdC-Px-7tE"/>
@@ -150,7 +155,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4dp-50-ptC" id="z9q-CT-w5a">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X3J-nN-MZc">
@@ -240,6 +245,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KZP-qd-6tC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2088.8000000000002" y="317.99100449775113"/>
+        </scene>
+        <!--Map-->
+        <scene sceneID="Ypm-f8-xMK">
+            <objects>
+                <viewController id="Rl0-Vj-T56" customClass="MapViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gRD-zj-aKb"/>
+                        <viewControllerLayoutGuide type="bottom" id="v1i-t4-dDR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="o5t-1A-ieq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Er4-QS-Gzw"/>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="v1i-t4-dDR" firstAttribute="top" secondItem="Er4-QS-Gzw" secondAttribute="bottom" id="BBh-Td-V0q"/>
+                            <constraint firstItem="Er4-QS-Gzw" firstAttribute="leading" secondItem="o5t-1A-ieq" secondAttribute="leading" id="BP9-XI-it4"/>
+                            <constraint firstAttribute="trailing" secondItem="Er4-QS-Gzw" secondAttribute="trailing" id="qiD-vC-y0G"/>
+                            <constraint firstItem="Er4-QS-Gzw" firstAttribute="top" secondItem="gRD-zj-aKb" secondAttribute="bottom" id="uGU-WG-S01"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Map" id="rCv-2W-qXQ"/>
+                    <connections>
+                        <outlet property="mapView" destination="Er4-QS-Gzw" id="h26-vF-PHD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DUA-sB-9c1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3028" y="1020.5397301349326"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="hUB-bl-N78">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eYG-bb-4Fu" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="csK-QX-ElP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Rl0-Vj-T56" kind="relationship" relationship="rootViewController" id="IhV-sW-SVV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U0Q-gU-Mzh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2089" y="1021"/>
         </scene>
     </scenes>
 </document>
