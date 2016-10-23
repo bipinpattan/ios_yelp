@@ -13,11 +13,17 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var businesses: [Business]!
     var searchBar: UISearchBar!
     
+    var categoryStates: [Int : Bool]!
+    var distancesStates: [Int : Bool]!
+    var sortByStates: [Int : Bool]!
+    var offeringADealState: Bool!
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupData()
         search(withTerm: "Thai")
         
         /* Example of Yelp search with more search options specified
@@ -43,6 +49,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         let navigationViewController = segue.destination as! UINavigationController
         let filtersViewController = navigationViewController.topViewController as! FiltersViewController
         filtersViewController.delegate = self
+        filtersViewController.switchStates = categoryStates
+        filtersViewController.distancesSwitchStates = distancesStates
+        filtersViewController.sortBySwitchStates = sortByStates
+        filtersViewController.offeringADealState = offeringADealState
     }
     
     // MARK:- Delegate callbacks
@@ -59,7 +69,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     // MARK: FiltersViewControllerDelegate
-    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int) {
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int, withCategoryStates categoryState: [Int : Bool]!, withDistancesStates distanceState: [Int : Bool]!, withSortByStates sortByState: [Int : Bool]!, withOfferingDealState dealState: Bool!) {
+        
         var mode: YelpSortMode
         switch sortBy {
         case 1:
@@ -72,6 +83,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             mode = .bestMatched
             break
         }
+        self.categoryStates = categoryState
+        self.distancesStates = distanceState
+        self.sortByStates = sortByState
+        self.offeringADealState = dealState
+        
         let categories = filters["categories"] as? [String]
         Business.searchWithTerm(term: "restaurants", sort: mode, categories: categories, deals: deals, radiusMeters: distance) {
             (businesses:[Business]?, error:Error?) in
@@ -100,6 +116,13 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         navigationController?.navigationBar.barTintColor = UIColor.red;
         navigationController?.navigationBar.tintColor = UIColor.white;
         navigationController?.navigationBar.isTranslucent = false;
+    }
+    
+    func setupData() {
+        categoryStates = [Int : Bool]()
+        distancesStates = [Int : Bool]()
+        sortByStates = [Int : Bool]()
+        offeringADealState = Bool()
     }
     
     func search(withTerm term: String) {

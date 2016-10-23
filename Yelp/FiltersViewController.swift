@@ -8,8 +8,8 @@
 
 import UIKit
 
-@objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int)
+protocol FiltersViewControllerDelegate {
+     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int, withCategoryStates categoryState: [Int : Bool]!, withDistancesStates distancesState: [Int : Bool]!, withSortByStates sortByState: [Int : Bool]!, withOfferingDealState offeringDealState: Bool!)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -22,8 +22,13 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var sortBy: [String]!
     var sortBySwitchStates: [Int : Bool]!
     var offeringADealState: Bool!
+
+    let kOfferingDealSetting = "kOfferingDealSetting"
+    let kCategoriesSetting = "kCategoriesSetting"
+    let kDistancesSetting = "kDistancesSetting"
+    let kSortBySetting = "kSortBySetting"
     
-    weak var delegate: FiltersViewControllerDelegate?
+    var delegate: FiltersViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +88,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             sortBy += 1
         }
-        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters, withDeals: offeringADealState, withSortBy:sortBy)
+        delegate?.filtersViewController(filtersViewController: self, didUpdateFilters: filters, withDistance: distMeters, withDeals: offeringADealState, withSortBy:sortBy, withCategoryStates: switchStates, withDistancesStates: distancesSwitchStates, withSortByStates: sortBySwitchStates, withOfferingDealState: offeringADealState)
     }
 
     func numberOfSections(in: UITableView) -> Int {
@@ -179,21 +184,21 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func setupData() {
         categories = yelpCategories()
-        switchStates = [Int : Bool]()
+//        switchStates = [Int : Bool]()
         
         distances = distanceCategories()
-        distancesSwitchStates = [Int : Bool]()
-        for i in 0 ..< distances.count  {
-            distancesSwitchStates[i] = false
-        }
+//        distancesSwitchStates = [Int : Bool]()
+//        for i in 0 ..< distances.count  {
+//            distancesSwitchStates[i] = false
+//        }
         
         sortBy = sortByCategories()
-        sortBySwitchStates = [Int : Bool]()
-        for i in 0 ..< sortBy.count  {
-            distancesSwitchStates[i] = false
-        }
+//        sortBySwitchStates = [Int : Bool]()
+//        for i in 0 ..< sortBy.count  {
+//            distancesSwitchStates[i] = false
+//        }
         
-        offeringADealState = Bool()
+//        offeringADealState = Bool()
     }
     
     func setupUI() {
