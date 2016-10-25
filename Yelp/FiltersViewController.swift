@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol FiltersViewControllerDelegate {
-     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int, withCategoryStates categoryState: [Int : Bool]!, withDistancesStates distancesState: [Int : Bool]!, withSortByStates sortByState: [Int : Bool]!, withOfferingDealState offeringDealState: Bool!)
+protocol FiltersViewControllerDelegate : class {
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], withDistance distance: Int, withDeals deals: Bool, withSortBy sortBy: Int, withCategoryStates categoryState: [Int : Bool]!, withDistancesStates distancesState: [Int : Bool]!, withSortByStates sortByState: [Int : Bool]!, withOfferingDealState offeringDealState: Bool!)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -28,7 +28,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     let kDistancesSetting = "kDistancesSetting"
     let kSortBySetting = "kSortBySetting"
     
-    var delegate: FiltersViewControllerDelegate?
+    weak var delegate: FiltersViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
